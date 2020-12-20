@@ -24,6 +24,7 @@ fun parseArguments(args: Array<String>): ApplicationArguments {
         description = "Dry run. Feel free to play around! Winners wont saved. Database wont be updated. Use it in combination with --scan to test import :)"
     )
     val list by parser.option(ArgType.Boolean, shortName = "l", description = "List participants")
+    val test by parser.option(ArgType.Boolean, shortName = "t", description = "Generate synthetic test participants")
     val reset by parser.option(ArgType.Boolean, description = "Resets all configuration. Danger, danger! ")
     val debug by parser.option(ArgType.Boolean, shortName = "D", description = "Turn on debug mode")
 
@@ -35,6 +36,7 @@ fun parseArguments(args: Array<String>): ApplicationArguments {
         scan == true,
         dryRun == true,
         list == true,
+        test == true,
         reset == true
     )
 }
@@ -46,5 +48,6 @@ data class ApplicationArguments(
     val scan: Boolean,
     val dryRun: Boolean,
     val list: Boolean,
+    val test: Boolean,
     val reset: Boolean
 )

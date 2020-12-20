@@ -294,8 +294,8 @@ public class MainWindow extends JFrame {
         participantTextFields.clear();
         Collection<ParticipantData> participants = currentGame.getParticipants();
         GridLayout layout = new GridLayout(participants.size() + 1, 3);
-//        layout.setHgap(10);
-//        layout.setVgap(5);
+        layout.setHgap(10);
+        layout.setVgap(5);
         pane.setLayout(layout);
         int row = 0;
         for (ParticipantData p : participants) {
@@ -341,9 +341,7 @@ public class MainWindow extends JFrame {
     }
 
     private boolean saveParticipants() {
-        Collection<ParticipantData> pTmp = currentGame.getParticipants();
-        List<ParticipantData> participants = new ArrayList<ParticipantData>(pTmp);
-        for (ParticipantData p : participants) {
+        for (ParticipantData p :  currentGame.getParticipants()) {
             JTextField field = participantTextFields.get(p.getUuid());
             String text = field.getText();
             if (isNumeric(text)) {

@@ -29,12 +29,13 @@ fun main(args: Array<String>) {
     db = connectDb()
     logger = Logger(appArgs.debug)
     gameParameters = createGameParameters(appArgs)
+
+    if (appArgs.dryRun) logger.info("*** DryRun: No database updates")
+    if (appArgs.reset) resetAllData()
+
     currentGame = createCurrentGame(appArgs)
 
-    if (appArgs.reset) resetAllData()
     if (appArgs.list) listParticipants()
-
-    if (gameParameters.dryRun) logger.info("*** DryRun: No database updates")
 
     EventQueue.invokeLater {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())

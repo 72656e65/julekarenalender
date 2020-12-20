@@ -11,7 +11,27 @@ import kotlin.system.exitProcess
 
 private val allowedExtensions = listOf("jpg", "jpeg", "png", "gif")
 
-fun scanForParticipants(): MutableList<ParticipantData>? {
+fun loadParticipants(appArgs: ApplicationArguments): List<ParticipantData> {
+    val maybeParticipants = when {
+        appArgs.scan -> {
+            scanForParticipants() // and save to database
+        }
+        appArgs.test -> {
+            syntheticTestDataGenerator()
+        }
+        else -> {
+            db.getRepository(ParticipantData::class.java).find().toList()
+        }
+    }
+    if (maybeParticipants == null || maybeParticipants.isEmpty()) {
+        logger.error("Found no participants!")
+        logger.info("Run with --test to generate some test participants")
+        exitProcess(1)
+    }
+    return maybeParticipants
+}
+
+private fun scanForParticipants(): MutableList<ParticipantData>? {
 
     logger.info("Scanning images-folder and importing participants...")
 
@@ -35,20 +55,7 @@ fun scanForParticipants(): MutableList<ParticipantData>? {
 }
 
 
-fun loadParticipants(appArgs: ApplicationArguments): List<ParticipantData> {
-    val maybeParticipants = if (appArgs.scan) {
-        scanForParticipants() // and save to database
-    } else {
-        db.getRepository(ParticipantData::class.java).find().toList()
-    }
-    if (maybeParticipants == null || maybeParticipants.isEmpty()) {
-        logger.error("Found no participants!")
-        return syntheticTestDataGenerator()
-    }
-    return maybeParticipants
-}
-
-fun syntheticTestDataGenerator(): List<ParticipantData> {
+private fun syntheticTestDataGenerator(): List<ParticipantData> {
     val firstnames = mutableListOf("Important", "Traditional", "Successful Søvnig", "Useful", "Comprehensive")
     val lastnames = mutableListOf("Bird", "Family", "Music", "Bottle", "Suggestion")
     firstnames.shuffle()

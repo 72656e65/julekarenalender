@@ -1,7 +1,10 @@
+.gradle
+.idea
+build
+out
 target
 *.iml
 *.ipr
 *.iws
-.idea
 .idea_modules
 *.db
